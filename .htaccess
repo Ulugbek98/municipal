@@ -1,0 +1,85 @@
+# BEGIN WordPress
+# The directives (lines) between "BEGIN WordPress" and "END WordPress" are
+# dynamically generated, and should only be modified via WordPress filters.
+# Any changes to the directives between these markers will be overwritten.
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+RewriteBase /
+RewriteRule ^index\.php$ - [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . /index.php [L]
+</IfModule>
+
+# END WordPress
+
+
+
+
+# Block the include-only files.
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteBase /
+RewriteRule ^wp-admin/includes/ - [F,L]
+RewriteRule !^wp-includes/ - [S=3]
+RewriteRule ^wp-includes/[^/]+\.php$ - [F,L]
+RewriteRule ^wp-includes/js/tinymce/langs/.+\.php - [F,L]
+RewriteRule ^wp-includes/theme-compat/ - [F,L]
+</IfModule>
+
+<files wp-config.php>
+order allow,deny
+deny from all
+</files>
+
+
+
+<IfModule mod_rewrite.c>
+    RewriteEngine on
+
+
+    ## Redirect from the `http://` -> `https://`
+    ## Uncomment below if site has ssl sertificate
+    RewriteCond %{HTTPS} !=on
+    RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+
+
+    ## Prevents serving dotfiles. It was universal for all
+    ## dotfiles, but since Letsencrypt wants to access dotfiles
+    ## while validation we protect only those files.
+    ## Starfall server Apache configurations already have this
+    ## rule. So uncomment it when you are serving the app in other
+    ## hostings.
+    RedirectMatch 403 /\.git.*$
+</IfModule>
+
+# BEGIN DS-XML-RPC-API
+# The directives (lines) between "BEGIN DS-XML-RPC-API" and "END DS-XML-RPC-API" are
+# dynamically generated, and should only be modified via WordPress filters.
+# Any changes to the directives between these markers will be overwritten.
+
+RewriteEngine on
+RewriteCond %{HTTP_REFERER} !^$
+RewriteCond %{HTTP_REFERER} !^https://municipal.loc [NC]
+RewriteCond %{HTTP_REFERER} !^http(s)?://(www\.)?google.com [NC]
+RewriteRule \.(jpg|jpeg|png|gif)$ – [NC,F,L]
+
+<Files xmlrpc.php>
+order deny,allow
+deny from all
+
+</Files>
+
+# END DS-XML-RPC-API
+# BEGIN DS-XML-RPC-FIX-HOTLINK
+# The directives (lines) between "BEGIN DS-XML-RPC-FIX-HOTLINK" and "END DS-XML-RPC-FIX-HOTLINK" are
+# dynamically generated, and should only be modified via WordPress filters.
+# Any changes to the directives between these markers will be overwritten.
+
+RewriteEngine on
+RewriteCond %{HTTP_REFERER} !^$
+RewriteCond %{HTTP_REFERER} !^https://municipal.loc [NC]
+RewriteCond %{HTTP_REFERER} !^http(s)?://(www\.)?google.com [NC]
+RewriteRule \.(jpg|jpeg|png|gif)$ – [NC,F,L] 
+# END DS-XML-RPC-FIX-HOTLINK
